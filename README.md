@@ -5,8 +5,8 @@
 |               | `var`    | `let`       | `const`     |
 | ------------- | -------- | ----------- | ----------- |
 | **Scope**     | Function | Block `{ }` | Block `{ }` |
-| **Redeclare** | ✅ Yes   | ❌ No       | ❌ No       |
-| **Update**    | ✅ Yes   | ✅ Yes      | ❌ No       |
+| **Redeclare** | Yes      | No          | No          |
+| **Update**    | Yes      | Yes         | No          |
 
 - **`var`** — Old way to declare variables. Function scoped. Can be redeclared and updated.
 - **`let`** — Modern way to declare variables. Block scoped (`{ }`). Can be updated but cannot be redeclared in the same scope.
