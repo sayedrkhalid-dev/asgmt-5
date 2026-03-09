@@ -13,7 +13,6 @@ const fetchJSON = async (url) => {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const b = await res.json();
-    console.log(b);
     return await b;
   } catch (err) {
     console.error("Fetch error:", err);
