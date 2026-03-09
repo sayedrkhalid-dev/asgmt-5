@@ -1,7 +1,3 @@
-// --------------------
-//  GitHub Issues Tracker — dashboard.js
-// --------------------
-
 const BASE = "https://phi-lab-server.vercel.app/api/v1/lab";
 
 // -- State --------------------
@@ -211,16 +207,16 @@ const MODAL_PRIORITY_COLOR = {
 };
 
 const makeLabelPill = (label) => {
-  const cfg = MODAL_LABEL[label.toLowerCase()] ?? {
+  const labelName = MODAL_LABEL[label.toLowerCase()] ?? {
     img: null,
     bg: "bg-gray-50",
     text: "text-gray-500",
     border: "border-gray-200",
   };
-  const icon = cfg.img
-    ? `<img src="${cfg.img}" class="w-3.5 h-3.5" />`
+  const icon = labelName.img
+    ? `<img src="${labelName.img}" class="w-3.5 h-3.5" />`
     : `<i class="fa-solid fa-tag text-[10px]"></i>`;
-  return `<span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border uppercase tracking-wide ${cfg.bg} ${cfg.text} ${cfg.border}">
+  return `<span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border uppercase tracking-wide ${labelName.bg} ${labelName.text} ${labelName.border}">
     ${icon}${label}
   </span>`;
 };
