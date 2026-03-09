@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Github Issue Tracker</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- DaisyUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style type="text/tailwindcss">
+      * {
+        font-family: "Geist", sans-serif;
+      }
+
+      @keyframes custom-spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: scale(0.94) translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .tab-active {
+        @apply bg-blue-600 text-white border-blue-600;
+      }
+
+      .card-enter {
+        animation: fadeUp 0.35s ease forwards;
+        opacity: 0;
+      }
+
+      .modal-animate {
+        animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .overlay-animate {
+        animation: overlayIn 0.2s ease forwards;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="bg-gray-200 min-h-screen">
+      <!-- NAVBAR  -->
+      <nav class="navbar bg-neutral-100 shadow-sm px-6 md:px-10">
+        <div class="flex flex-1 gap-3 items-center">
+          <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+            <img
+              src="./assets/github-logo.png"
+              alt="GitHub Logo"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <span class="text-lg font-bold hidden md:block"
+            >GitHub Issues Tracker</span
+          >
+        </div>
+
+        <div class="flex gap-2 items-center">
+          <div class="relative">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"
+            ></i>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search issues..."
+              class="input input-bordered pl-9 w-36 md:w-56 text-sm"
+            />
+          </div>
+          <button
+            class="btn bg-blue-600 hover:bg-blue-500 text-white border-none text-sm gap-2"
+          >
+            <i class="fa-solid fa-plus"></i>
+            <span class="hidden sm:inline">New Issue</span>
+          </button>
+        </div>
+      </nav>
+
+      <!--  MAIN  -->
+      <main class="max-w-[1100px] mx-auto py-6 px-4">
+        <div class="flex flex-col gap-4">
+          <!-- TABS -->
+          <div
+            id="issue-tabs"
+            class="bg-neutral-100 flex gap-2 rounded-xl p-4 shadow-lg"
+          >
+            <button
+              data-tab="all"
+              class="tab-active w-[100px] py-2 border border-neutral-300 hover:border-blue-500 transition-all rounded-lg cursor-pointer text-sm font-semibold flex items-center justify-center"
+            >
+              All
+            </button>
+            <button
+              data-tab="open"
+              class="w-[100px] py-2 border border-neutral-300 hover:border-blue-500 transition-all rounded-lg cursor-pointer text-sm text-neutral-600 hover:text-blue-600 font-semibold flex items-center justify-center"
+            >
+              Open
+            </button>
+            <button
+              data-tab="closed"
+              class="w-[100px] py-2 border border-neutral-300 hover:border-blue-500 transition-all rounded-lg cursor-pointer text-sm text-neutral-600 hover:text-blue-600 font-semibold flex items-center justify-center"
+            >
+              Closed
+            </button>
+          </div>
+
+          <!-- ISSUE PANEL -->
+          <div class="flex flex-col rounded-xl overflow-hidden shadow-xl">
+            <!-- Summary Header -->
+            <div
+              class="flex justify-between items-center bg-neutral-100 p-4 border-b border-neutral-200"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-11 h-11 flex items-center justify-center bg-blue-100 rounded-full"
+                >
+                  <img
+                    src="./assets/Aperture.svg"
+                    alt="Issues"
+                    class="w-6 h-6"
+                  />
+                </div>
+                <div>
+                  <h1
+                    id="total-issue"
+                    class="text-xl font-bold text-neutral-800"
+                  >
+                    0 Issues
+                  </h1>
+                  <p class="text-xs text-neutral-500">
+                    Track and manage your project issues
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4">
+                <span
+                  class="flex items-center gap-1.5 text-sm font-semibold text-neutral-700"
+                >
+                  <i class="fa-solid fa-circle text-green-500 text-xs"></i> Open
+                </span>
+                <span
+                  class="flex items-center gap-1.5 text-sm font-semibold text-neutral-700"
+                >
+                  <i class="fa-solid fa-circle text-purple-500 text-xs"></i>
+                  Closed
+                </span>
+              </div>
+            </div>
+
+            <!-- Cards area -->
+            <div class="bg-neutral-50 flex flex-col items-center min-h-[220px]">
+              <!-- Loader -->
+              <div
+                id="loading-bar"
+                class="flex flex-col items-center gap-3 py-16"
+              >
+                <span
+                  class="loading loading-bars loading-md text-blue-500"
+                ></span>
+                <p class="text-sm text-neutral-400">Loading issues...</p>
+              </div>
+
+              <!-- Empty state -->
+              <div
+                id="empty-state"
+                class="hidden flex-col items-center justify-center py-16 gap-3 text-neutral-400"
+              >
+                <div
+                  class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center"
+                >
+                  <i
+                    class="fa-solid fa-magnifying-glass text-2xl text-neutral-300"
+                  ></i>
+                </div>
+                <p class="font-semibold text-neutral-600">No issues found</p>
+                <p class="text-sm">Try a different search or filter</p>
+              </div>
+
+              <!-- Grid -->
+              <div
+                id="issue-cards-container"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 w-full"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL-->
+    <div
+      id="modal-overlay"
+      class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+      style="background: rgba(15, 15, 20, 0.45); backdrop-filter: blur(4px)"
+    >
+      <div
+        id="modal-box"
+        class="modal-animate bg-white rounded-2xl w-full max-w-[600px] shadow-2xl overflow-hidden"
+      >
+        <div class="p-7 flex flex-col gap-5">
+          <!-- Title -->
+          <h2
+            id="modal-title"
+            class="text-2xl font-bold text-neutral-900 leading-snug"
+          ></h2>
+
+          <!-- Status pill • Opened by author • date -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="modal-status"></span>
+            <span class="text-neutral-300 text-sm">•</span>
+            <span id="modal-meta-line" class="text-sm text-neutral-500"></span>
+          </div>
+
+          <!-- Label pills -->
+          <div id="modal-labels" class="flex flex-wrap gap-2"></div>
+
+          <!-- Description — plain, no box -->
+          <p
+            id="modal-description"
+            class="text-sm text-neutral-600 leading-relaxed"
+          ></p>
+
+          <!-- Assignee + Priority info box -->
+          <div class="bg-neutral-50 rounded-xl p-5 grid grid-cols-2 gap-6">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-neutral-400">Assignee:</span>
+              <span
+                id="modal-assignee"
+                class="text-base font-bold text-neutral-800"
+              ></span>
+            </div>
+            <div class="flex flex items-center gap-2">
+              <span class="text-sm text-neutral-400">Priority:</span>
+              <span id="modal-priority"></span>
+            </div>
+          </div>
+
+          <!-- Close button -->
+          <div class="flex justify-end">
+            <button
+              id="modal-close"
+              class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors text-white font-bold text-base px-8 py-3 rounded-xl cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./dashboard.js"></script>
+  </body>
+</html>
