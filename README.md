@@ -96,7 +96,7 @@ Template literals allow you to insert variables inside strings using backticks `
 **Example:**
 
 ```js
-const name = "Khalid";
+const name = "Syed R. Kalid (Al-amin)";
 const message = `Hello ${name}`;
 ```
 
@@ -105,5 +105,3 @@ const message = `Hello ${name}`;
 ```
 Hello Khalid
 ```
-
-They make string formatting easier.
